@@ -17,18 +17,41 @@
             padding: 30px;
             border-radius: 12px;
             box-shadow: 0 0 15px #ccc;
+            width: 400px;
         }
         input {
             display: block;
             width: 100%;
-            margin-bottom: 15px;
+            margin-bottom: 5px;
             padding: 10px;
+        }
+        .hint {
+            display: none;
+            font-size: 0.9em;
+            color: #777;
+            margin-bottom: 15px;
+        }
+        input:focus + .hint {
+            display: block;
         }
         .msg {
             color: green;
         }
         .error {
             color: red;
+        }
+        .btn {
+            margin-top: 10px;
+            padding: 10px;
+            width: 100%;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+        }
+        .btn:hover {
+            background-color: #45a049;
         }
     </style>
 </head>
@@ -39,11 +62,54 @@
             <p class="{{ 'error' if 'exists' in message else 'msg' }}">{{ message }}</p>
         {% endif %}
         <form method="POST">
+
             <input type="text" name="username" placeholder="Username" required />
+            <div class="hint">Enter a unique username (letters and/or numbers).</div>
+
             <input type="password" name="password" placeholder="Password" required />
-            <input type="submit" value="Register" />
+            <div class="hint">Password should contain letters, numbers, and symbols.</div>
+
+            <input type="text" name="first_name" placeholder="First Name" required />
+            <div class="hint">Only English letters are allowed (A-Z, a-z).</div>
+
+            <input type="text" name="last_name" placeholder="Last Name" required />
+            <div class="hint">Only English letters are allowed (A-Z, a-z).</div>
+
+            <input type="text" name="id_number" placeholder="ID Number (9 digits)" required />
+            <div class="hint">Enter exactly 9 digits for ID.</div>
+
+            <input type="text" name="credit_card_number" placeholder="Credit Card (XXXX XXXX XXXX XXXX)" required />
+            <div class="hint">Enter 16 digits, grouped in 4s or without spaces.</div>
+
+            <input type="text" name="valid_date" placeholder="Valid Date (MM/YY)" required />
+            <div class="hint">Enter date in MM/YY format (e.g., 12/25).</div>
+
+            <input type="text" name="cvc" placeholder="CVC (3 digits)" required />
+            <div class="hint">Enter exactly 3 digits for CVC.</div>
+
+            <input type="submit" value="Register" class="btn" />
         </form>
+
         <a href="{{ url_for('login') }}">Back to Login</a>
     </div>
+<script>
+document.addEventListener("DOMContentLoaded", function() {
+    const creditCardInput = document.querySelector('input[name="credit_card_number"]');
+
+    creditCardInput.addEventListener('input', function(e) {
+        let value = e.target.value.replace(/\D/g, ''); // إزالة أي شيء غير أرقام
+        value = value.substring(0, 16); // فقط 16 رقم
+
+        // إضافة مسافة كل 4 أرقام
+        let formattedValue = '';
+        for (let i = 0; i < value.length; i += 4) {
+            formattedValue += value.substring(i, i + 4) + ' ';
+        }
+
+        e.target.value = formattedValue.trim(); // إزالة المسافة الأخيرة
+    });
+});
+</script>
+
 </body>
 </html>
